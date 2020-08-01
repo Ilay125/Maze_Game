@@ -1,7 +1,7 @@
 class Cell:
     def __init__(self):
         '''
-        Initialize a cell.
+        Initializes a cell.
         :returns: None
         '''
         self.up = False

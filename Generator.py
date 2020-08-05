@@ -1,7 +1,7 @@
 from Grid import Grid as g
 import random
 
-class Algorithm:
+class Generator:
     def __init__(self, rows, cols):
         self.start = (random.randrange(0, rows), random.randrange(0, cols))
         self.Grid = g(rows, cols, self.start)

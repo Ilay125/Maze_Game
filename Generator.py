@@ -9,7 +9,6 @@ class Generator:
         self.way = [self.start]
         self.found = False
 
-
     def deadend(self):
         r, c = self.loc
         cell = self.Grid.grid[r, c]
@@ -20,7 +19,6 @@ class Generator:
         self.loc = self.way[-1]
 
         return False
-
 
     def turn(self, loc):
         poss = []
@@ -41,9 +39,9 @@ class Generator:
 
             if len(poss) == 0:
                 self.found = self.deadend()
+                return self.turn(self.Grid.grid[self.loc])
 
         return random.choice(poss)
-
 
     def move(self):
         r, c = self.loc

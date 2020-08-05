@@ -35,9 +35,8 @@ def main():
         for i in range(rows):
             pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height))
 
-
-
-
+        for i in range(cols):
+            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT))
 
 
         clock.tick(FPS)

@@ -32,12 +32,11 @@ def main():
                 pygame.quit()
                 quit()
 
-        for i in range(rows):
-            pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height))
+        for i in range(rows + 1):
+            pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height), 5)
 
-        for i in range(cols):
-            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT))
-
+        for i in range(cols + 1):
+            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 5)
 
         clock.tick(FPS)
         pygame.display.update()

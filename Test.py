@@ -38,6 +38,8 @@ def main():
         for i in range(cols + 1):
             pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 5)
 
+        gen.move()
+
         clock.tick(FPS)
         pygame.display.update()
 

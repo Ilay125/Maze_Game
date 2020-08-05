@@ -7,6 +7,10 @@ class Generator:
         self.Grid = g(rows, cols, self.start)
         self.loc = self.start
         self.way = [self.start]
+        self.rows = rows
+        self.cols = cols
+
+        self.Grid.grid[self.start[0]][self.start[1]].possible = False
 
     def deadend(self):
         r, c = self.loc
@@ -17,25 +21,29 @@ class Generator:
 
         self.loc = self.way[-1]
 
-
     def turn(self, loc):
         r, c = self.loc
         poss = []
         found = False
 
         while not found:
-            if not loc.up and not self.Grid.grid[r][c - 1].been:
-                poss.append("up")
-                found = True
-            if not loc.down and not self.Grid.grid[r][c + 1].been:
-                poss.append("down")
-                found = True
-            if not loc.left and not self.Grid.grid[r - 1][c].been:
-                poss.append("left")
-                found = True
-            if not loc.right and not self.Grid.grid[r + 1][c].been:
-                poss.append("right")
-                found = True
+
+            if c-1 > -1:
+                if not loc.up and not self.Grid.grid[r][c - 1].been and self.Grid.grid[r][c - 1].possible:
+                    poss.append("up")
+                    found = True
+            if c+1 < self.cols:
+                if not loc.down and not self.Grid.grid[r][c + 1].been and self.Grid.grid[r][c + 1].possible:
+                    poss.append("down")
+                    found = True
+            if r-1 > -1:
+                if not loc.left and not self.Grid.grid[r - 1][c].been and self.Grid.grid[r - 1][c].possible:
+                    poss.append("left")
+                    found = True
+            if r+1 < self.rows:
+                if not loc.right and not self.Grid.grid[r + 1][c].been and self.Grid.grid[r + 1][c].possible:
+                    poss.append("right")
+                    found = True
 
             if not found:
                 self.deadend()
@@ -45,7 +53,8 @@ class Generator:
         return random.choice(poss)
 
     def move(self):
-        print(self.loc)
+        print(self.way)
+
         r, c = self.loc
         cell = self.Grid.grid[r][c]
 

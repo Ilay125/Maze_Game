@@ -21,19 +21,20 @@ class Generator:
         return False
 
     def turn(self, loc):
+        r, c = self.loc
         poss = []
 
         while not self.found:
-            if not loc.up:
+            if not loc.up and not self.Grid.grid[r][c - 1].been:
                 poss.append("up")
                 self.found = True
-            if not loc.down:
+            if not loc.down and not self.Grid.grid[r][c + 1].been:
                 poss.append("down")
                 self.found = True
-            if not loc.left:
+            if not loc.left and not self.Grid.grid[r - 1][c].been:
                 poss.append("left")
                 self.found = True
-            if not loc.right:
+            if not loc.right and not self.Grid.grid[r + 1][c].been:
                 poss.append("right")
                 self.found = True
 
@@ -45,7 +46,7 @@ class Generator:
 
     def move(self):
         r, c = self.loc
-        cell = self.Grid.grid[r, c]
+        cell = self.Grid.grid[r][c]
 
         cell.been = True
         self.way.append(self.loc)
@@ -53,25 +54,25 @@ class Generator:
         turn = self.turn(cell)
         if turn == "up":
             cell.up = True
-            self.Grid.grid[r, c - 1].down = True
+            self.Grid.grid[r][c - 1].down = True
 
             self.loc = (r, c - 1)
 
         elif turn == "down":
             cell.down = True
-            self.Grid.grid[r, c + 1].up = True
+            self.Grid.grid[r][c + 1].up = True
 
             self.loc = (r, c + 1)
 
         elif turn == "left":
             cell.left = True
-            self.Grid.grid[r - 1, c].right = True
+            self.Grid.grid[r - 1][c].right = True
 
             self.loc = (r - 1, c)
 
         elif turn == "right":
             cell.right = True
-            self.Grid.grid[r + 1, c].left = True
+            self.Grid.grid[r + 1][c].left = True
 
             self.loc = (r + 1, c)
 

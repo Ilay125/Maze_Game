@@ -7,30 +7,50 @@ class Generator:
         self.Grid = g(rows, cols, self.start)
         self.loc = self.start
         self.way = [self.start]
+        self.found = False
+
+
+    def deadend(self):
+        r, c = self.loc
+        cell = self.Grid.grid[r, c]
+
+        cell.possible = False
+        self.way.remove(self.loc)
+
+        self.loc = self.way[-1]
+
+        return False
+
 
     def turn(self, loc):
         poss = []
 
-        if not loc.up:
-            poss.append("up")
-        if not loc.down:
-            poss.append("down")
-        if not loc.left:
-            poss.append("left")
-        if not loc.right:
-            poss.append("right")
+        while not self.found:
+            if not loc.up:
+                poss.append("up")
+                self.found = True
+            if not loc.down:
+                poss.append("down")
+                self.found = True
+            if not loc.left:
+                poss.append("left")
+                self.found = True
+            if not loc.right:
+                poss.append("right")
+                self.found = True
 
-        if len(poss) == 0:
-            pass
+            if len(poss) == 0:
+                self.found = self.deadend()
 
         return random.choice(poss)
 
+
     def move(self):
-        r, c = self.cell
+        r, c = self.loc
         cell = self.Grid.grid[r, c]
 
         cell.been = True
-        self.way.append(self.cell)
+        self.way.append(self.loc)
 
         turn = self.turn(cell)
         if turn == "up":

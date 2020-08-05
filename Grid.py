@@ -15,6 +15,6 @@ class Grid:
         for i in range(self.rows):
             self.grid.append([])
             for j in range(self.cols):
-                self.grid[i].append(Cell)
+                self.grid[i].append(Cell())
 
         self.start = start

@@ -9,4 +9,4 @@ class Cell:
         self.left = False
         self.right = False
         self.been = False
-        self.possible = False
+        self.possible = True

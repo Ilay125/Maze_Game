@@ -6,10 +6,9 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 800
 
-FPS = 30
-
 rows = int(input("Rows: "))
 cols = int(input("Cols: "))
+FPS = int(input("Speed (FPS): "))
 
 cell_width = WIDTH//cols
 cell_height = HEIGHT//rows
@@ -17,6 +16,7 @@ cell_height = HEIGHT//rows
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
+PURPLE = (255, 0, 255)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -32,14 +32,17 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_SPACE:
+                    gen.move()
+
+        pygame.draw.rect(win, PURPLE, (gen.loc[0] * cell_width, gen.loc[1] * cell_height, cell_width, cell_height))
 
         for i in range(rows + 1):
             pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height), 5)
 
         for i in range(cols + 1):
             pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 5)
-
-        gen.move()
 
         for r in range(rows):
             for c in range(cols):

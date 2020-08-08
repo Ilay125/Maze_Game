@@ -8,5 +8,4 @@ class Cell:
         self.down = False
         self.left = False
         self.right = False
-        self.been = False
-        self.possible = True
+

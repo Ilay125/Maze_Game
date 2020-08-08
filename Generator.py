@@ -9,15 +9,12 @@ class Generator:
         self.way = []
         self.rows = rows
         self.cols = cols
-
-        self.Grid.grid[self.start[0]][self.start[1]].possible = False
+        self.impossible = []
 
     def deadend(self):
-        c, r = self.loc
-        cell = self.Grid.grid[c][r]
 
-        cell.possible = False
         self.way.remove(self.loc)
+        self.impossible.append(self.loc)
 
         self.loc = self.way[-1]
 
@@ -29,62 +26,58 @@ class Generator:
         while not found:
 
             if c > 0:
-                if not loc.up and not self.Grid.grid[c-1][r].been and self.Grid.grid[c - 1][r].possible:
+                if not loc.up and (c, r-1) not in self.way and (c, r-1) not in self.impossible:
                     poss.append("up")
                     found = True
             if c + 1 < self.cols:
-                if not loc.down and not self.Grid.grid[c+1][r].been and self.Grid.grid[c + 1][r].possible:
+                if not loc.down and (c, r+1) not in self.way and (c, r+1) not in self.impossible:
                     poss.append("down")
                     found = True
             if r > 0:
-                if not loc.left and not self.Grid.grid[c][r-1].been and self.Grid.grid[c][r - 1].possible:
+                if not loc.left and (c-1, r) not in self.way and (c-1, r) not in self.impossible:
                     poss.append("left")
                     found = True
             if r + 1 < self.rows:
-                if not loc.right and not self.Grid.grid[c][r+1].been and self.Grid.grid[c][r + 1].possible:
+                if not loc.right and (c+1, r) not in self.way and (c+1, r) not in self.impossible:
                     poss.append("right")
                     found = True
 
             if not found:
+                print("ded")
                 self.deadend()
                 return self.turn(self.Grid.grid[self.loc[0]][self.loc[1]])
-
-
         return random.choice(poss)
 
     def move(self):
         c, r = self.loc
         cell = self.Grid.grid[c][r]
 
-        cell.been = True
-
-        print(self.loc)
-
         self.way.append(self.loc)
 
         turn = self.turn(cell)
+        print(turn)
         if turn == "up":
             cell.up = True
-            self.Grid.grid[c - 1][r].down = True
+            self.Grid.grid[c][r - 1].down = True
 
-            self.loc = (c - 1, r)
+            self.loc = (c, r - 1)
 
         elif turn == "down":
             cell.down = True
-            self.Grid.grid[c + 1][r].up = True
-
-            self.loc = (c + 1, r)
-
-        elif turn == "left":
-            cell.left = True
-            self.Grid.grid[c][r-1].right = True
-
-            self.loc = (c, r-1)
-
-        elif turn == "right":
-            cell.right = True
-            self.Grid.grid[c][r + 1].left = True
+            self.Grid.grid[c][r + 1].up = True
 
             self.loc = (c, r + 1)
 
+        elif turn == "left":
+            cell.left = True
+            self.Grid.grid[c-1][r].right = True
+
+            self.loc = (c-1, r)
+
+        elif turn == "right":
+            cell.right = True
+            self.Grid.grid[c + 1][r].left = True
+
+            self.loc = (c + 1, r)
+        print(self.loc)
 

@@ -54,10 +54,10 @@ def main():
         for r in range(rows):
             for c in range(cols):
                 if gen.Grid.grid[c][r].up:
-                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c-1)*cell_width, r*cell_height), 5)
+                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c+1)*cell_width, r*cell_height), 5)
 
                 if gen.Grid.grid[c][r].down:
-                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c+1)*cell_width, r*cell_height), 5)
+                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c-1)*cell_width, r*cell_height), 5)
 
                 if gen.Grid.grid[c][r].left:
                     pygame.draw.line(win, RED, (c*cell_width, r*cell_height), (c*cell_width, (r-1)*cell_height), 5)

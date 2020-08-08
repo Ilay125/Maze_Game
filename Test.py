@@ -25,6 +25,8 @@ clock = pygame.time.Clock()
 def main():
     gen = Generator(rows, cols)
 
+    data_analysis_mode = False
+
     while True:
         win.fill(WHITE)
 
@@ -34,7 +36,12 @@ def main():
                 quit()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
+                    data_analysis_mode = not data_analysis_mode
+                if data_analysis_mode and event.key == pygame.K_UP:
                     gen.move()
+
+        if not data_analysis_mode:
+            gen.move()
 
         pygame.draw.rect(win, PURPLE, (gen.loc[0] * cell_width, gen.loc[1] * cell_height, cell_width, cell_height))
 

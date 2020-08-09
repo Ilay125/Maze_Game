@@ -10,8 +10,13 @@ class Generator:
         self.rows = rows
         self.cols = cols
         self.impossible = [self.start]
+        self.done = False
 
     def deadend(self):
+        if not self.way:
+            self.done = True
+            return
+
         self.impossible.append(self.loc)
 
         backc = self.loc[1] - self.way[-2][1]

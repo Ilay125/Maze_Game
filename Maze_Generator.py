@@ -1,16 +1,13 @@
 from Generator import Generator
 import pygame
-from time import time
 
 
 def generation(rows, cols):
     gen = Generator(rows, cols)
-    start_time = time()
 
     while not gen.done:
         gen.move()
 
-    print(time()-start_time)
     return gen.Grid.grid, gen.start, gen.last
 
 

@@ -80,25 +80,25 @@ def main():
 
 
         for i in range(rows + 1):
-            pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height), 5)
+            pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height), 1)
 
         for i in range(cols + 1):
-            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 5)
+            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 1)
 
         for r in range(rows):
             for c in range(cols):
                 if gen.Grid.grid[c][r].up:
-                    pygame.draw.line(win, RED if not gen.done else WHITE, (c*cell_width, r*cell_height), ((c+1)*cell_width, r*cell_height), 5)
+                    pygame.draw.line(win, RED if not gen.done else WHITE, (c*cell_width, r*cell_height), ((c+1)*cell_width, r*cell_height), 1)
 
                 if gen.Grid.grid[c][r].down:
                     pygame.draw.line(win, RED if not gen.done else WHITE, (c*cell_width, (r+1)*cell_height),
-                                     ((c+1)*cell_width, (r+1)*cell_height), 5)
+                                     ((c+1)*cell_width, (r+1)*cell_height), 1)
 
                 if gen.Grid.grid[c][r].left:
-                    pygame.draw.line(win, RED if not gen.done else WHITE, (c*cell_width, r*cell_height), (c*cell_width, (r+1)*cell_height), 5)
+                    pygame.draw.line(win, RED if not gen.done else WHITE, (c*cell_width, r*cell_height), (c*cell_width, (r+1)*cell_height), 1)
 
                 if gen.Grid.grid[c][r].right:
-                    pygame.draw.line(win, RED if not gen.done else WHITE, ((c+1)*cell_width, r*cell_height), ((c+1)*cell_width, (r+1)*cell_height), 5)
+                    pygame.draw.line(win, RED if not gen.done else WHITE, ((c+1)*cell_width, r*cell_height), ((c+1)*cell_width, (r+1)*cell_height), 1)
 
         if not gen.done and info == "yes":
             for c in range(cols):

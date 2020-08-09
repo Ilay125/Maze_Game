@@ -10,8 +10,8 @@ rows = int(input("Rows: "))
 cols = int(input("Cols: "))
 info = input("Show info (Yes/No): ").lower()
 
-cell_width = WIDTH//cols
-cell_height = HEIGHT//rows
+cell_width = WIDTH/cols
+cell_height = HEIGHT/rows
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)

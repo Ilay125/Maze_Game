@@ -18,8 +18,8 @@ def main():
     rows = int(input("Rows: "))
     cols = int(input("Cols: "))
 
-    cell_width = WIDTH // cols
-    cell_height = HEIGHT // rows
+    cell_width = WIDTH / cols
+    cell_height = HEIGHT / rows
 
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)

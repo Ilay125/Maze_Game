@@ -11,11 +11,9 @@ class Generator:
         self.cols = cols
         self.impossible = [self.start]
         self.done = False
+        self.last = ()
 
     def deadend(self):
-        if not self.way:
-            self.done = True
-            return
 
         self.impossible.append(self.loc)
 
@@ -42,28 +40,30 @@ class Generator:
         poss = []
         found = False
 
-        while not found:
+        if len(self.way)+len(self.impossible)-1 == self.rows*self.cols:
+            self.last = self.loc
+            self.done = True
 
-            if r > 0:
-                if not loc.up and (c, r-1) not in self.way and (c, r-1) not in self.impossible:
-                    poss.append("up")
-                    found = True
-            if r + 1 < self.cols:
-                if not loc.down and (c, r+1) not in self.way and (c, r+1) not in self.impossible:
-                    poss.append("down")
-                    found = True
-            if c > 0:
-                if not loc.left and (c-1, r) not in self.way and (c-1, r) not in self.impossible:
-                    poss.append("left")
-                    found = True
-            if c + 1 < self.rows:
-                if not loc.right and (c+1, r) not in self.way and (c+1, r) not in self.impossible:
-                    poss.append("right")
-                    found = True
+        if r > 0:
+            if not loc.up and (c, r-1) not in self.way and (c, r-1) not in self.impossible:
+                poss.append("up")
+                found = True
+        if r + 1 < self.cols:
+            if not loc.down and (c, r+1) not in self.way and (c, r+1) not in self.impossible:
+                poss.append("down")
+                found = True
+        if c > 0:
+            if not loc.left and (c-1, r) not in self.way and (c-1, r) not in self.impossible:
+                poss.append("left")
+                found = True
+        if c + 1 < self.rows:
+            if not loc.right and (c+1, r) not in self.way and (c+1, r) not in self.impossible:
+                poss.append("right")
+                found = True
 
-            if not found:
-                print("ded")
-                return self.deadend()
+        if not found:
+            print("ded")
+            return self.deadend()
         return random.choice(poss)
 
     def move(self):

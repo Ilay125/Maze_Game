@@ -8,7 +8,6 @@ HEIGHT = 800
 
 rows = int(input("Rows: "))
 cols = int(input("Cols: "))
-FPS = int(input("Speed (FPS): "))
 
 cell_width = WIDTH//cols
 cell_height = HEIGHT//rows
@@ -18,9 +17,11 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 PURPLE = (255, 0, 255)
 GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
+
 
 def write(txt, x, y, color, font="comicsansms", size=10, aa=True, angle=0):
     temp = pygame.font.SysFont(font, size)
@@ -28,12 +29,15 @@ def write(txt, x, y, color, font="comicsansms", size=10, aa=True, angle=0):
     temp = pygame.transform.rotate(temp, angle)
     win.blit(temp, (x, y))
 
+
 def main():
+    FPS = 10
     gen = Generator(rows, cols)
 
     data_analysis_mode = False
 
     while True:
+
         win.fill(WHITE)
 
         for event in pygame.event.get():
@@ -45,6 +49,10 @@ def main():
                     data_analysis_mode = not data_analysis_mode
                 if data_analysis_mode and event.key == pygame.K_UP:
                     gen.move()
+                if not data_analysis_mode and event.key == pygame.K_RIGHT:
+                    FPS = FPS+5 if FPS != 1 else 5
+                if not data_analysis_mode and event.key == pygame.K_LEFT:
+                    FPS = FPS-5 if FPS-5 > 0 else 1
 
         if not data_analysis_mode:
             gen.move()
@@ -79,7 +87,8 @@ def main():
                 write("Left", c * cell_width + 10, r * cell_height + 30, GREEN if gen.Grid.grid[c][r].left else RED)
                 write("Right", c * cell_width + 10, r * cell_height + 40, GREEN if gen.Grid.grid[c][r].right else RED)
 
-
+        write(f"Data analysis mode: {data_analysis_mode}", 5, HEIGHT-30, BLUE)
+        write(f"FPS: {FPS}", 5, HEIGHT-20, BLUE)
 
         clock.tick(FPS)
         pygame.display.update()

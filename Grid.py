@@ -12,9 +12,11 @@ class Grid:
         self.cols = cols
         self.grid = []
 
-        for i in range(self.rows):
+        for i in range(self.cols):
             self.grid.append([])
-            for j in range(self.cols):
+            for j in range(self.rows):
                 self.grid[i].append(Cell())
+
+        print(self.grid)
 
         self.start = start

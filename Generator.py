@@ -20,9 +20,6 @@ class Generator:
         backc = self.loc[1] - self.way[-2][1]
         backr = self.loc[0] - self.way[-2][0]
 
-        print(self.way[-1])
-        print(self.loc)
-
         self.way.pop()
         self.way.pop()
 
@@ -63,7 +60,6 @@ class Generator:
                 found = True
 
         if not found:
-            print("ded")
             return self.deadend()
         return random.choice(poss)
 
@@ -93,5 +89,4 @@ class Generator:
             cell.right = True
             self.loc = (c + 1, r)
             self.Grid.grid[self.loc[0]][self.loc[1]].left = True
-        print(turn)
 

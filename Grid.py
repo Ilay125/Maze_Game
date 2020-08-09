@@ -15,5 +15,4 @@ class Grid:
             for j in range(rows):
                 self.grid[i].append(Cell())
 
-        print(self.grid)
 

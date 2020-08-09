@@ -8,6 +8,7 @@ HEIGHT = 800
 
 rows = int(input("Rows: "))
 cols = int(input("Cols: "))
+info = input("Show info (Yes/No): ").lower()
 
 cell_width = WIDTH//cols
 cell_height = HEIGHT//rows
@@ -99,7 +100,7 @@ def main():
                 if gen.Grid.grid[c][r].right:
                     pygame.draw.line(win, RED if not gen.done else WHITE, ((c+1)*cell_width, r*cell_height), ((c+1)*cell_width, (r+1)*cell_height), 5)
 
-        if not gen.done:
+        if not gen.done and info == "yes":
             for c in range(cols):
                 for r in range(rows):
                     write("Up", c*cell_width+10, r*cell_height+10, GREEN if gen.Grid.grid[c][r].up else RED)
@@ -107,8 +108,9 @@ def main():
                     write("Left", c * cell_width + 10, r * cell_height + 30, GREEN if gen.Grid.grid[c][r].left else RED)
                     write("Right", c * cell_width + 10, r * cell_height + 40, GREEN if gen.Grid.grid[c][r].right else RED)
 
-        write(f"Data analysis mode: {data_analysis_mode}", 5, HEIGHT-30, BLUE)
-        write(f"FPS: {FPS}", 5, HEIGHT-20, BLUE)
+
+            write(f"Data analysis mode: {data_analysis_mode}", 5, HEIGHT-30, BLUE)
+            write(f"FPS: {FPS}", 5, HEIGHT-20, BLUE)
 
         clock.tick(FPS)
         pygame.display.update()

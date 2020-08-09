@@ -8,12 +8,12 @@ def generation(rows, cols):
     while not gen.done:
         gen.move()
 
-    return gen.Grid.grid
+    return gen.Grid.grid, gen.start, gen.last
 
 
 def main():
-    WIDTH = 800
-    HEIGHT = 600
+    WIDTH = 1060
+    HEIGHT = 1060
 
     rows = int(input("Rows: "))
     cols = int(input("Cols: "))
@@ -26,7 +26,7 @@ def main():
     GREEN = (0, 255, 0)
     RED = (255, 0, 0)
 
-    maze = generation(rows, cols)
+    maze, start, last = generation(rows, cols)
 
     pygame.init()
 
@@ -41,27 +41,35 @@ def main():
                 pygame.quit()
                 quit()
 
+        pygame.draw.rect(win, GREEN, (last[0] * cell_width, last[1] * cell_height, cell_width, cell_height))
+
+        pygame.draw.rect(win, RED, (start[0] * cell_width, start[1] * cell_height, cell_width, cell_height))
+
+        for i in range(rows + 1):
+            pygame.draw.line(win, BLACK, (0, i*cell_height), (WIDTH, i*cell_height), 1)
+
+        for i in range(cols + 1):
+            pygame.draw.line(win, BLACK, (i*cell_width, 0), (i*cell_width, HEIGHT), 1)
+
         for r in range(rows):
             for c in range(cols):
-                if not maze[c][r].up:
-                    pygame.draw.line(win, BLACK, (c * cell_width, r * cell_height),
-                                     ((c + 1) * cell_width, r * cell_height), 5)
+                if maze[c][r].up:
+                    pygame.draw.line(win, WHITE, (c * cell_width, r * cell_height),
+                                     ((c + 1) * cell_width, r * cell_height), 1)
 
                 if maze[c][r].down:
-                    pygame.draw.line(win, BLACK, (c * cell_width, (r + 1) * cell_height),
-                                     ((c + 1) * cell_width, (r + 1) * cell_height), 5)
+                    pygame.draw.line(win, WHITE, (c * cell_width, (r + 1) * cell_height),
+                                     ((c + 1) * cell_width, (r + 1) * cell_height), 1)
 
                 if maze[c][r].left:
-                    pygame.draw.line(win, BLACK, (c * cell_width, r * cell_height),
-                                     (c * cell_width, (r + 1) * cell_height), 5)
+                    pygame.draw.line(win, WHITE, (c * cell_width, r * cell_height),
+                                     (c * cell_width, (r + 1) * cell_height), 1)
 
                 if maze[c][r].right:
-                    pygame.draw.line(win, BLACK, ((c + 1) * cell_width, r * cell_height),
-                                     ((c + 1) * cell_width, (r + 1) * cell_height), 5)
+                    pygame.draw.line(win, WHITE, ((c + 1) * cell_width, r * cell_height),
+                                     ((c+1)*cell_width, (r+1)*cell_height), 1)
 
-        pygame.draw.rect(win, GREEN, (maze.last[0] * cell_width, maze.last[1] * cell_height, cell_width, cell_height))
 
-        pygame.draw.rect(win, RED, (maze.start[0] * cell_width, maze.start[1] * cell_height, cell_width, cell_height))
 
         clock.tick(30)
         pygame.display.update()

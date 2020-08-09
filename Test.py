@@ -18,6 +18,7 @@ RED = (255, 0, 0)
 PURPLE = (255, 0, 255)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
@@ -56,6 +57,9 @@ def main():
 
         if not data_analysis_mode:
             gen.move()
+
+        for c, r in gen.way:
+            pygame.draw.rect(win, YELLOW, (c * cell_width, r * cell_height, cell_width, cell_height))
 
         pygame.draw.rect(win, PURPLE, (gen.loc[0] * cell_width, gen.loc[1] * cell_height, cell_width, cell_height))
 

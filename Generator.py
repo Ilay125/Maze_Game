@@ -43,6 +43,7 @@ class Generator:
         if len(self.way)+len(self.impossible)-1 == self.rows*self.cols:
             self.last = self.loc
             self.done = True
+            return
 
         if r > 0:
             if not loc.up and (c, r-1) not in self.way and (c, r-1) not in self.impossible:

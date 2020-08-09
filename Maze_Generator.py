@@ -1,19 +1,22 @@
 from Generator import Generator
 import pygame
+from time import time
 
 
 def generation(rows, cols):
     gen = Generator(rows, cols)
+    start_time = time()
 
     while not gen.done:
         gen.move()
 
+    print(time()-start_time)
     return gen.Grid.grid, gen.start, gen.last
 
 
 def main():
-    WIDTH = 1060
-    HEIGHT = 1060
+    WIDTH = 1000
+    HEIGHT = 1000
 
     rows = int(input("Rows: "))
     cols = int(input("Cols: "))

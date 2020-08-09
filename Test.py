@@ -17,10 +17,16 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 PURPLE = (255, 0, 255)
+GREEN = (0, 255, 0)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
+def write(txt, x, y, color, font="comicsansms", size=10, aa=True, angle=0):
+    temp = pygame.font.SysFont(font, size)
+    temp = temp.render(txt, aa, color)
+    temp = pygame.transform.rotate(temp, angle)
+    win.blit(temp, (x, y))
 
 def main():
     gen = Generator(rows, cols)
@@ -57,13 +63,22 @@ def main():
                     pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c+1)*cell_width, r*cell_height), 5)
 
                 if gen.Grid.grid[c][r].down:
-                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), ((c-1)*cell_width, r*cell_height), 5)
+                    pygame.draw.line(win, RED, (c*cell_width, (r+1)*cell_height),
+                                     ((c+1)*cell_width, (r+1)*cell_height), 5)
 
                 if gen.Grid.grid[c][r].left:
-                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), (c*cell_width, (r-1)*cell_height), 5)
+                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), (c*cell_width, (r+1)*cell_height), 5)
 
                 if gen.Grid.grid[c][r].right:
-                    pygame.draw.line(win, RED, (c*cell_width, r*cell_height), (c*cell_width, (r+1)*cell_height), 5)
+                    pygame.draw.line(win, RED, ((c+1)*cell_width, r*cell_height), ((c+1)*cell_width, (r+1)*cell_height), 5)
+
+        for c in range(cols):
+            for r in range(rows):
+                write("Up", c*cell_width+10, r*cell_height+10, GREEN if gen.Grid.grid[c][r].up else RED)
+                write("Down", c * cell_width + 10, r * cell_height + 20, GREEN if gen.Grid.grid[c][r].down else RED)
+                write("Left", c * cell_width + 10, r * cell_height + 30, GREEN if gen.Grid.grid[c][r].left else RED)
+                write("Right", c * cell_width + 10, r * cell_height + 40, GREEN if gen.Grid.grid[c][r].right else RED)
+
 
 
         clock.tick(FPS)

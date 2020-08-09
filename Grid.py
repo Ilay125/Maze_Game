@@ -1,22 +1,19 @@
 from Cell import *
 
 class Grid:
-    def __init__(self, rows, cols, start):
+    def __init__(self, rows, cols):
         '''
         Initializes a grid.
         :param rows: int
         :param cols: int
         :return: None
         '''
-        self.rows = rows
-        self.cols = cols
         self.grid = []
 
-        for i in range(self.cols):
+        for i in range(cols):
             self.grid.append([])
-            for j in range(self.rows):
+            for j in range(rows):
                 self.grid[i].append(Cell())
 
         print(self.grid)
 
-        self.start = start

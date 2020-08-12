@@ -3,7 +3,7 @@ import random
 
 class Generator:
     def __init__(self, rows, cols):
-        self.start = (random.randrange(0, rows), random.randrange(0, cols))
+        self.start = (random.randrange(0, cols), random.randrange(0, rows))
         self.Grid = g(rows, cols)
         self.loc = self.start
         self.way = []

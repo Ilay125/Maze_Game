@@ -13,6 +13,21 @@ class Generator:
         self.done = False
         self.last = ()
 
+    def random_end_point(self):
+        borderrows = self.rows // 2
+        bordercols = self.cols // 2
+
+        if self.start[1] > borderrows:
+            r_end = random.randrange(0, borderrows)
+        else:
+            r_end = random.randrange(borderrows, self.rows)
+        if bordercols < self.start[0]:
+            c_end = random.randrange(0, bordercols)
+        else:
+            c_end = random.randrange(bordercols, self.cols)
+
+        return c_end, r_end
+
     def deadend(self):
 
         self.impossible.append(self.loc)
@@ -38,7 +53,7 @@ class Generator:
         found = False
 
         if len(self.way)+len(self.impossible)-1 == self.rows*self.cols:
-            self.last = self.loc
+            self.last = self.random_end_point()
             self.done = True
             return
 
@@ -89,4 +104,6 @@ class Generator:
             cell.right = True
             self.loc = (c + 1, r)
             self.Grid.grid[self.loc[0]][self.loc[1]].left = True
+
+
 

@@ -46,7 +46,7 @@ class Generator:
             if not loc.up and (c, r-1) not in self.way and (c, r-1) not in self.impossible:
                 poss.append("up")
                 found = True
-        if r + 1 < self.cols:
+        if r + 1 < self.rows:
             if not loc.down and (c, r+1) not in self.way and (c, r+1) not in self.impossible:
                 poss.append("down")
                 found = True
@@ -54,11 +54,11 @@ class Generator:
             if not loc.left and (c-1, r) not in self.way and (c-1, r) not in self.impossible:
                 poss.append("left")
                 found = True
-        if c + 1 < self.rows:
+        if c + 1 < self.cols:
             if not loc.right and (c+1, r) not in self.way and (c+1, r) not in self.impossible:
                 poss.append("right")
                 found = True
-
+                
         if not found:
             return self.deadend()
         return random.choice(poss)

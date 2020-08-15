@@ -1,4 +1,4 @@
-from Generator import Generator
+from Classes.Generator import Generator
 import pygame
 
 pygame.init()

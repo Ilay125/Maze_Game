@@ -119,11 +119,11 @@ def custom_form(error=False):
                         theme_console.delete()
                 else:
                     if index == 0:
-                        rows_console.write(event.unicode)
+                        rows_console.write(event.unicode, True)
                     elif index == 1:
-                        cols_console.write(event.unicode)
+                        cols_console.write(event.unicode, True)
                     elif index == 2:
-                        buttons_console.write(event.unicode)
+                        buttons_console.write(event.unicode, True)
                     elif index == 3:
                         theme_console.write(event.unicode)
 

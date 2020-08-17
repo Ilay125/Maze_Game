@@ -1,5 +1,6 @@
 class Console:
     ABC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,><'1234567890-*/+=_)(&#!%^$[]{}`~; "
+    NUMS = "0123456789"
 
     def __init__(self, active=True):
         '''
@@ -35,7 +36,7 @@ class Console:
         if self.active:
             self.txt = self.txt[:-1]
 
-    def write(self, char):
+    def write(self, char, ints = False):
         '''
         Writes new char in the console.
         :param char: char
@@ -44,8 +45,13 @@ class Console:
         if self.active:
             if self.txt == "_":
                 self.txt = ""
-            if char in self.ABC:
-                self.txt += char
+
+            if ints:
+                if char in self.NUMS:
+                    self.txt += char
+            else:
+                if char in self.ABC:
+                    self.txt += char
 
     def animation(self):
         '''

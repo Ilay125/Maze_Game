@@ -25,6 +25,8 @@ clock = pygame.time.Clock()
 folder_path = os.path.dirname(__file__)
 image_dir = os.path.join(folder_path, "images")
 
+loadingrun = False
+
 
 def write(txt, x, y, font="arial", color=BLACK, size=30, aa=True, angle=0):
     temp = pygame.font.SysFont(font, size, True)
@@ -58,7 +60,7 @@ def loading_screen():
     x2 = WIDTH/2
     square_state = 0
 
-    while True:
+    while loadingrun:
         clock.tick(5)
         win.fill(WHITE)
 
@@ -204,7 +206,12 @@ def generation(rows, cols, buttons):
 
 
 def custom(rows, cols, theme, buttons):
+    global loadingrun
+    loading_thread = threading.Thread(target=loading_screen)
+    loadingrun = True
+    loading_thread.start()
     grid, startpoint, endpoint, button_list = generation(rows, cols, buttons)
+    loadingrun = False
 
     cell_width = WIDTH / cols
     cell_height = HEIGHT / rows
@@ -304,5 +311,5 @@ def menu():
 
 
 
-loading_screen()
+menu()
 

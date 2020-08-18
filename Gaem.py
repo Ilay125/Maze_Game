@@ -15,6 +15,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKRED = (180, 0, 0)
+CYAN = (0, 255, 255)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Generator: The Gaem Edition")
@@ -24,11 +25,13 @@ clock = pygame.time.Clock()
 folder_path = os.path.dirname(__file__)
 image_dir = os.path.join(folder_path, "images")
 
+
 def write(txt, x, y, font="arial", color=BLACK, size=30, aa=True, angle=0):
     temp = pygame.font.SysFont(font, size, True)
     temp = temp.render(txt, aa, color)
     temp = pygame.transform.rotate(temp, angle)
     win.blit(temp, (x, y))
+
 
 def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, action=None, args=None):
     mouse = pygame.mouse.get_pos()
@@ -46,6 +49,45 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     font = pygame.font.SysFont(font, fontSize, True)
     screen_text = font.render(msg, True, tcolor)
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
+
+
+def loading_screen():
+    state = 0
+
+    x1 = WIDTH/2-105
+    x2 = WIDTH/2
+    square_state = 0
+
+    while True:
+        clock.tick(5)
+        win.fill(WHITE)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        loading_text = "Loading"+"."*state
+        button(loading_text, 0, 0, WIDTH, HEIGHT, WHITE, WHITE, fontSize=200, tcolor=RED)
+
+        state += 1
+
+        if state > 3:
+            state = 0
+
+        pygame.draw.rect(win, CYAN, (x1, HEIGHT-250, 100, 100))
+        pygame.draw.rect(win, CYAN, (x2, HEIGHT-140, 100, 100))
+
+        square_state += 1
+
+        if (square_state // 2) % 2 == 0:
+            x1 = WIDTH / 2 - 105
+            x2 = WIDTH / 2
+        else:
+            x2 = WIDTH / 2 - 105
+            x1 = WIDTH / 2
+
+        pygame.display.update()
 
 
 def verify_custom_form(args):
@@ -262,5 +304,5 @@ def menu():
 
 
 
-menu()
+loading_screen()
 

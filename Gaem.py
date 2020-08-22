@@ -219,9 +219,9 @@ def custom(rows, cols, theme, buttons):
     theme_dir = os.path.join(image_dir, "themes")
     themes = os.path.join(theme_dir, theme)
     normal_block = pygame.image.load(os.path.join(themes, "normal.png"))
-    normal_block = pygame.transform.scale(normal_block, (int(cell_width), int(cell_height)))
+    normal_block = pygame.transform.scale(normal_block, (int(cell_width) * 5, int(cell_height) * 5))
     special_block = pygame.image.load(os.path.join(themes, "special.png"))
-    special_block = pygame.transform.scale(special_block, (int(cell_width), int(cell_height)))
+    special_block = pygame.transform.scale(special_block, (int(cell_width) * 5, int(cell_height) * 5))
     off_button = pygame.image.load(os.path.join(themes, "off_button.png"))
     off_button = pygame.transform.scale(off_button, (int(cell_width), int(cell_height)))
     on_button = pygame.image.load(os.path.join(themes, "on_button.png"))
@@ -234,13 +234,11 @@ def custom(rows, cols, theme, buttons):
     specialblocklist = []
     isopen = False
 
-    wall_color = WHITE
-    if theme == "futuristic":
-        wall_color = BLACK
+    wall_color = BLACK if theme == "futuristic" else WHITE
 
-    for r in range(rows):
-        for c in range(cols):
-            if randint(1, 100) == 10:
+    for r in range(rows//5):
+        for c in range(cols//5):
+            if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
     while True:
@@ -250,16 +248,18 @@ def custom(rows, cols, theme, buttons):
                 pygame.quit()
                 quit()
 
-        for r in range(rows):
-            for c in range(cols):
+        for r in range(rows//5+1):
+            for c in range(cols//5+1):
 
                 for s in specialblocklist:
                     if s[0] == c and s[1] == r:
-                        win.blit(special_block, (c*cell_width, r*cell_height))
+                        win.blit(special_block, (c*cell_width*5, r*cell_height*5))
                         break
                 else:
-                    win.blit(normal_block, (c*cell_width, r*cell_height))
+                    win.blit(normal_block, (c*cell_width*5, r*cell_height*5))
 
+        for r in range(rows):
+            for c in range(cols):
                 for b in button_list:
                     if b[0] != c or b[1] != r:
                         continue

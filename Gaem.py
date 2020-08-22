@@ -212,7 +212,7 @@ def custom(rows, cols, theme, buttons):
     grid, startpoint, endpoint, button_list = generation(rows, cols, buttons)
     loadingrun = False
 
-    cell_width = WIDTH / cols
+    cell_width = (WIDTH-200) / cols
     cell_height = HEIGHT / rows
 
     theme_dir = os.path.join(image_dir, "themes")
@@ -241,7 +241,12 @@ def custom(rows, cols, theme, buttons):
             if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
+    mouse = pygame.mouse
+
     while True:
+        mx = mouse.get_pos()[0]
+        my = mouse.get_pos()[1]
+        print(mx, my)
         win.fill(WHITE)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

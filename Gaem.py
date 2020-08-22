@@ -10,12 +10,15 @@ pygame.init()
 WIDTH = 1200
 HEIGHT = 1000
 
+sidebar_width = 200
+
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKRED = (180, 0, 0)
 CYAN = (0, 255, 255)
+GRAY = (150, 150, 150)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Maze Generator: The Gaem Edition")
@@ -51,6 +54,13 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     font = pygame.font.SysFont(font, fontSize, True)
     screen_text = font.render(msg, True, tcolor)
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
+
+
+def get_cell(cols, rows, x, y):
+    cell_width = (WIDTH-sidebar_width) / cols
+    cell_height = HEIGHT / rows
+
+    return int(x//cell_width), int(y//cell_height)
 
 
 def loading_screen():
@@ -212,7 +222,7 @@ def custom(rows, cols, theme, buttons):
     grid, startpoint, endpoint, button_list = generation(rows, cols, buttons)
     loadingrun = False
 
-    cell_width = (WIDTH-200) / cols
+    cell_width = (WIDTH-sidebar_width) / cols
     cell_height = HEIGHT / rows
 
     theme_dir = os.path.join(image_dir, "themes")
@@ -241,12 +251,38 @@ def custom(rows, cols, theme, buttons):
             if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
+    cursor_dir = os.path.join(image_dir, "cursors")
+    cursor_img = pygame.image.load(os.path.join(cursor_dir, "white.png" if theme == "mordor" else "black.png"))
+
     mouse = pygame.mouse
+    mouse.set_visible(False)
+    mouse.set_pos(startpoint[0]*cell_width+cell_width/2, startpoint[1]*cell_height+cell_height/2)
+    current_cell = startpoint
 
     while True:
+
         mx = mouse.get_pos()[0]
         my = mouse.get_pos()[1]
-        print(mx, my)
+
+        if mx >= WIDTH-sidebar_width-cursor_img.get_rect().width:
+            mouse.set_pos(WIDTH-sidebar_width-cursor_img.get_rect().width, my)
+
+        if get_cell(rows, cols, mx, my)[0] > current_cell[0]:
+            if not grid[current_cell[0]][current_cell[1]].right:
+                mouse.set_pos((current_cell[0]+1)*cell_width-1, my)
+        elif get_cell(rows, cols, mx, my)[0] < current_cell[0]:
+            if not grid[current_cell[0]][current_cell[1]].left:
+                mouse.set_pos(current_cell[0] * cell_width + 1, my)
+
+        if get_cell(rows, cols, mx, my)[1] > current_cell[1]:
+            if not grid[current_cell[0]][current_cell[1]].down:
+                mouse.set_pos(mx, (current_cell[1]+1)*cell_height-1)
+        elif get_cell(rows, cols, mx, my)[1] < current_cell[1]:
+            if not grid[current_cell[0]][current_cell[1]].up:
+                mouse.set_pos(mx, current_cell[1] * cell_height + 1)
+
+        current_cell = get_cell(rows, cols, mx, my)
+
         win.fill(WHITE)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -258,10 +294,10 @@ def custom(rows, cols, theme, buttons):
 
                 for s in specialblocklist:
                     if s[0] == c and s[1] == r:
-                        win.blit(special_block, (c*cell_width*5, r*cell_height*5))
+                        win.blit(special_block, (c*int(cell_width)*5, r*int(cell_height)*5))
                         break
                 else:
-                    win.blit(normal_block, (c*cell_width*5, r*cell_height*5))
+                    win.blit(normal_block, (c*int(cell_width)*5, r*int(cell_height)*5))
 
         for r in range(rows):
             for c in range(cols):
@@ -292,7 +328,12 @@ def custom(rows, cols, theme, buttons):
                     pygame.draw.line(win, wall_color, ((c + 1) * cell_width, r * cell_height),
                                      ((c + 1) * cell_width, (r + 1) * cell_height), 1)
 
-        clock.tick(60)
+        pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
+        pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
+
+        win.blit(cursor_img, mouse.get_pos())
+
+        clock.tick(255)
         pygame.display.update()
 
 

@@ -207,9 +207,8 @@ def generation(rows, cols, buttons):
 
 def custom(rows, cols, theme, buttons):
     global loadingrun
-    loading_thread = threading.Thread(target=loading_screen)
     loadingrun = True
-    loading_thread.start()
+    threading.Thread(target=loading_screen).start()
     grid, startpoint, endpoint, button_list = generation(rows, cols, buttons)
     loadingrun = False
 
@@ -218,6 +217,7 @@ def custom(rows, cols, theme, buttons):
 
     theme_dir = os.path.join(image_dir, "themes")
     themes = os.path.join(theme_dir, theme)
+
     normal_block = pygame.image.load(os.path.join(themes, "normal.png"))
     normal_block = pygame.transform.scale(normal_block, (int(cell_width) * 5, int(cell_height) * 5))
     special_block = pygame.image.load(os.path.join(themes, "special.png"))
@@ -289,6 +289,7 @@ def custom(rows, cols, theme, buttons):
 
         clock.tick(60)
         pygame.display.update()
+
 
 def menu():
     menu_dir = os.path.join(image_dir, "menu")

@@ -251,21 +251,20 @@ def custom(rows, cols, theme, buttons):
             if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
-    cursor_dir = os.path.join(image_dir, "cursors")
-    cursor_img = pygame.image.load(os.path.join(cursor_dir, "white.png" if theme == "mordor" else "black.png"))
-
     mouse = pygame.mouse
     mouse.set_visible(False)
     mouse.set_pos(startpoint[0]*cell_width+cell_width/2, startpoint[1]*cell_height+cell_height/2)
     current_cell = startpoint
+
+    cursor_rad = 8
 
     while True:
 
         mx = mouse.get_pos()[0]
         my = mouse.get_pos()[1]
 
-        if mx >= WIDTH-sidebar_width-cursor_img.get_rect().width:
-            mouse.set_pos(WIDTH-sidebar_width-cursor_img.get_rect().width, my)
+        if mx >= WIDTH-sidebar_width-cursor_rad:
+            mouse.set_pos(WIDTH-sidebar_width-cursor_rad, my)
 
         if get_cell(rows, cols, mx, my)[0] > current_cell[0]:
             if not grid[current_cell[0]][current_cell[1]].right:
@@ -331,8 +330,7 @@ def custom(rows, cols, theme, buttons):
         pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
         pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
 
-        win.blit(cursor_img, mouse.get_pos())
-
+        pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK, (mx, my), cursor_rad)
         clock.tick(255)
         pygame.display.update()
 

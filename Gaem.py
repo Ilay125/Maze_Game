@@ -4,6 +4,7 @@ from Classes.Generator import Generator
 import os
 from random import randint
 from Classes.Console import Console
+from time import time
 
 pygame.init()
 
@@ -55,6 +56,13 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     screen_text = font.render(msg, True, tcolor)
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
 
+def timer(start_time):
+    this_time = int(time()-start_time)
+    minutes = str(this_time//60) if len(str(this_time//60)) > 1 else f"0{str(this_time//60)}"
+    seconds = str(this_time%60) if len(str(this_time%60)) > 1 else f"0{str(this_time%60)}"
+
+    return f"{minutes}:{seconds}"
+
 
 def loading_screen():
     state = 0
@@ -97,7 +105,7 @@ def loading_screen():
 
 def verify_custom_form(args):
     rows, cols, buttons, theme = args
-    if rows == "" and cols == "" and buttons == "" and theme == "":
+    if (rows == "" or rows == "_") and (cols == "" or cols == "_") and (buttons == "" or buttons == "_") and (theme == "" or theme == "_"):
         custom_form()
     if rows.isnumeric():
         rows = int(rows)
@@ -111,6 +119,8 @@ def verify_custom_form(args):
 
     if buttons.isnumeric():
         buttons = int(buttons)
+        if rows * cols - 2 < buttons:
+            custom_form(True)
     else:
         custom_form(True)
 
@@ -250,6 +260,8 @@ def custom(rows, cols, theme, buttons):
     cx = startpoint[0]
     cy = startpoint[1]
 
+    start_time = time()
+
     while True:
 
         win.fill(WHITE)
@@ -323,11 +335,11 @@ def custom(rows, cols, theme, buttons):
 
         pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
         pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
+        write("The Maze Gaem", 1010, 20, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"{timer(start_time)}", 1010, 50, color=WHITE if theme == "futuristic" else BLACK)
 
         pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK,
                            (int(cx*cell_width+cell_width/2), int(cy*cell_height+cell_height/2)), cursor_rad)
-
-        print(cx, cy)
 
         clock.tick(255)
         pygame.display.update()

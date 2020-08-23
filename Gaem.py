@@ -56,13 +56,6 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
 
 
-def get_cell(cols, rows, x, y):
-    cell_width = (WIDTH-sidebar_width) / cols
-    cell_height = HEIGHT / rows
-
-    return int(x//cell_width), int(y//cell_height)
-
-
 def loading_screen():
     state = 0
 
@@ -146,6 +139,8 @@ def custom_form(error=False):
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    menu()
                 if event.key == pygame.K_DOWN or event.key == pygame.K_TAB:
                     index += 1
                     if index > 3:
@@ -251,42 +246,44 @@ def custom(rows, cols, theme, buttons):
             if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
-    mouse = pygame.mouse
-    mouse.set_visible(False)
-    mouse.set_pos(startpoint[0]*cell_width+cell_width/2, startpoint[1]*cell_height+cell_height/2)
-    current_cell = startpoint
-
     cursor_rad = 8
+    cx = startpoint[0]
+    cy = startpoint[1]
 
     while True:
 
-        mx = mouse.get_pos()[0]
-        my = mouse.get_pos()[1]
-
-        if mx >= WIDTH-sidebar_width-cursor_rad:
-            mouse.set_pos(WIDTH-sidebar_width-cursor_rad, my)
-
-        if get_cell(rows, cols, mx, my)[0] > current_cell[0]:
-            if not grid[current_cell[0]][current_cell[1]].right:
-                mouse.set_pos((current_cell[0]+1)*cell_width-1, my)
-        elif get_cell(rows, cols, mx, my)[0] < current_cell[0]:
-            if not grid[current_cell[0]][current_cell[1]].left:
-                mouse.set_pos(current_cell[0] * cell_width + 1, my)
-
-        if get_cell(rows, cols, mx, my)[1] > current_cell[1]:
-            if not grid[current_cell[0]][current_cell[1]].down:
-                mouse.set_pos(mx, (current_cell[1]+1)*cell_height-1)
-        elif get_cell(rows, cols, mx, my)[1] < current_cell[1]:
-            if not grid[current_cell[0]][current_cell[1]].up:
-                mouse.set_pos(mx, current_cell[1] * cell_height + 1)
-
-        current_cell = get_cell(rows, cols, mx, my)
-
         win.fill(WHITE)
         for event in pygame.event.get():
+            if event.type == pygame.KEYUP:
+                if (event.key == pygame.K_UP or event.key == pygame.K_w) and grid[cx][cy].up:
+                    if cy > 0:
+                        cy -= 1
+                if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and grid[cx][cy].down:
+                    if cy < cols-1:
+                        cy += 1
+                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and grid[cx][cy].left:
+                    if cx > 0:
+                        cx -= 1
+                if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and grid[cx][cy].right:
+                    if cx < rows-1:
+                        cx += 1
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+
+        if not isopen:
+            for b in button_list:
+                if b[0] == cx and b[1] == cy:
+                    b[2] = True
+            count = 0
+            for b in button_list:
+                if b[2]:
+                    count += 1
+            if count == len(button_list):
+                isopen = True
+        else:
+            if cx == endpoint[0] and cy == endpoint[1]:
+                custom_form()
 
         for r in range(rows//5+1):
             for c in range(cols//5+1):
@@ -306,10 +303,7 @@ def custom(rows, cols, theme, buttons):
                     win.blit(on_button if b[2] else off_button, (c*cell_width, r*cell_height))
 
                 if endpoint[0] == c and endpoint[1] == r:
-                    if isopen:
-                        win.blit(opened_trapdoor, (c*cell_width, r*cell_height))
-                    else:
-                        win.blit(closed_trapdoor, (c * cell_width, r * cell_height))
+                    win.blit(opened_trapdoor if isopen else closed_trapdoor, (c*cell_width, r*cell_height))
 
                 if not grid[c][r].up:
                     pygame.draw.line(win, wall_color, (c * cell_width, r * cell_height),
@@ -330,7 +324,11 @@ def custom(rows, cols, theme, buttons):
         pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
         pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
 
-        pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK, (mx, my), cursor_rad)
+        pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK,
+                           (int(cx*cell_width+cell_width/2), int(cy*cell_height+cell_height/2)), cursor_rad)
+
+        print(cx, cy)
+
         clock.tick(255)
         pygame.display.update()
 

@@ -37,6 +37,9 @@ class Generator:
             r = random.randrange(0, self.rows)
             while r == self.start[1] or r == self.last[1]:
                 r = random.randrange(0, self.rows)
+            while [c, r, False] in listofbuttons:
+                c = random.randrange(0, self.cols)
+                r = random.randrange(0, self.rows)
 
             listofbuttons.append([c, r, False])
 

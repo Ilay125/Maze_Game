@@ -19,6 +19,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 DARKRED = (180, 0, 0)
 CYAN = (0, 255, 255)
+DARKCYAN = (0, 180, 180)
 GRAY = (150, 150, 150)
 
 win = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -220,6 +221,33 @@ def generation(rows, cols, buttons):
     return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons)
 
 
+def finish(timer, mode):
+    global loadingrun
+    while True:
+        win.fill(WHITE)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        button("YOU FINISHED THE LEVEL!", 0, 0, WIDTH, HEIGHT-200, WHITE, WHITE, tcolor=CYAN, fontSize=100)
+        write(f"Time: {timer}", WIDTH // 2 - 200, 450, size=100)
+
+
+        if mode == "custom":
+            button("Main Menu", WIDTH // 2 - 200, HEIGHT // 2 + 300, 450, 150, DARKRED, RED, fontSize=50, action=menu)
+        else:
+            loadingrun = True
+            button("Next Level", WIDTH // 2 - 500, HEIGHT // 2 + 300, 450, 150, DARKCYAN, CYAN, fontSize=50, action=loading_screen)
+            #TODO main game
+            button("Main Menu", WIDTH // 2 + 100, HEIGHT // 2 + 300, 450, 150, DARKRED, RED, fontSize=50, action=menu)
+
+
+        clock.tick(30)
+        pygame.display.update()
+
+
+
 def custom(rows, cols, theme, buttons):
     global loadingrun
     loadingrun = True
@@ -295,7 +323,7 @@ def custom(rows, cols, theme, buttons):
                 isopen = True
         else:
             if cx == endpoint[0] and cy == endpoint[1]:
-                custom_form()
+                finish(timer(start_time), "custom")
 
         for r in range(rows//5+1):
             for c in range(cols//5+1):
@@ -336,7 +364,13 @@ def custom(rows, cols, theme, buttons):
         pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
         pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
         write("The Maze Gaem", 1010, 20, color=WHITE if theme == "futuristic" else BLACK)
-        write(f"{timer(start_time)}", 1010, 50, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"Time: {timer(start_time)}", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"{buttons-count} {'buttons' if buttons-count != 1 else 'button'} left", 1010, 150, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"out of {buttons} {'buttons' if buttons != 1 else 'button'}", 1010, 180, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"Rows: {rows}", 1010, 230, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"Cols: {cols}", 1010, 280, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"Theme:", 1010, 330, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"{theme}", 1010, 360, color=WHITE if theme == "futuristic" else BLACK)
 
         pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK,
                            (int(cx*cell_width+cell_width/2), int(cy*cell_height+cell_height/2)), cursor_rad)

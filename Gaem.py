@@ -2,9 +2,10 @@ import pygame
 import threading
 from Classes.Generator import Generator
 import os
-from random import randint
+from random import randint, choice
 from Classes.Console import Console
 from time import time
+from math import ceil
 
 pygame.init()
 
@@ -57,8 +58,8 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     screen_text = font.render(msg, True, tcolor)
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
 
-def timer(start_time):
-    this_time = int(time()-start_time)
+def timer(start_time, time):
+    this_time = int(time()-start_time) if time == 0 else int(time-(time()-start_time))
     minutes = str(this_time//60) if len(str(this_time//60)) > 1 else f"0{str(this_time//60)}"
     seconds = str(this_time%60) if len(str(this_time%60)) > 1 else f"0{str(this_time%60)}"
 
@@ -128,7 +129,7 @@ def verify_custom_form(args):
     if theme.lower() not in ["dungeon", "futuristic", "mordor"]:
         custom_form(True)
 
-    custom(rows, cols, theme, buttons)
+    custom(rows, cols, theme, buttons, "custom")
 
 
 def custom_form(error=False):
@@ -221,7 +222,7 @@ def generation(rows, cols, buttons):
     return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons)
 
 
-def finish(timer, mode):
+def finish(timer, mode, level=0, diff=0):
     global loadingrun
     while True:
         win.fill(WHITE)
@@ -232,23 +233,20 @@ def finish(timer, mode):
 
         button("YOU FINISHED THE LEVEL!", 0, 0, WIDTH, HEIGHT-200, WHITE, WHITE, tcolor=CYAN, fontSize=100)
         write(f"Time: {timer}", WIDTH // 2 - 200, 450, size=100)
-
+        if level == 10:
+            mode = "custom"
 
         if mode == "custom":
             button("Main Menu", WIDTH // 2 - 200, HEIGHT // 2 + 300, 450, 150, DARKRED, RED, fontSize=50, action=menu)
         else:
-            loadingrun = True
-            button("Next Level", WIDTH // 2 - 500, HEIGHT // 2 + 300, 450, 150, DARKCYAN, CYAN, fontSize=50, action=loading_screen)
-            #TODO main game
+            button("Next Level", WIDTH // 2 - 500, HEIGHT // 2 + 300, 450, 150, DARKCYAN, CYAN, fontSize=50, action=game, args=(diff, level+1))
             button("Main Menu", WIDTH // 2 + 100, HEIGHT // 2 + 300, 450, 150, DARKRED, RED, fontSize=50, action=menu)
-
 
         clock.tick(30)
         pygame.display.update()
 
 
-
-def custom(rows, cols, theme, buttons):
+def custom(rows, cols, theme, buttons, mode, timecount=0, lvlanddiff=(0, 0)):
     global loadingrun
     loadingrun = True
     threading.Thread(target=loading_screen).start()
@@ -323,7 +321,7 @@ def custom(rows, cols, theme, buttons):
                 isopen = True
         else:
             if cx == endpoint[0] and cy == endpoint[1]:
-                finish(timer(start_time), "custom")
+                finish(timer(start_time, 0), mode, lvlanddiff[0], lvlanddiff[1])
 
         for r in range(rows//5+1):
             for c in range(cols//5+1):
@@ -364,7 +362,10 @@ def custom(rows, cols, theme, buttons):
         pygame.draw.rect(win, CYAN if theme == "futuristic" else GRAY, (1000, 0, 200, HEIGHT))
         pygame.draw.line(win, BLACK, (1000, 0), (1000, HEIGHT))
         write("The Maze Gaem", 1010, 20, color=WHITE if theme == "futuristic" else BLACK)
-        write(f"Time: {timer(start_time)}", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
+        if mode == "custom":
+            write(f"Time: {timer(start_time, 0)}", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
+        else:
+            write(f"Time: {timer(start_time, timecount)} left", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
         write(f"{buttons-count} {'buttons' if buttons-count != 1 else 'button'} left", 1010, 150, color=WHITE if theme == "futuristic" else BLACK)
         write(f"out of {buttons} {'buttons' if buttons != 1 else 'button'}", 1010, 180, color=WHITE if theme == "futuristic" else BLACK)
         write(f"Rows: {rows}", 1010, 230, color=WHITE if theme == "futuristic" else BLACK)
@@ -377,6 +378,14 @@ def custom(rows, cols, theme, buttons):
 
         clock.tick(255)
         pygame.display.update()
+
+
+def game(diff, lvl):
+    if lvl < 10:
+        size = lvl*5+5
+        custom(size, size, choice(["futuristic, dungeon"]), ceil((lvl-1)/2+1) if lvl != 1 else 2, "game", (lvl*diff)/1.5, (diff, lvl))
+    else:
+        custom(75, 75, "mordor", 7, "game", (lvl*diff)/1.5, (diff, lvl))
 
 
 def menu():

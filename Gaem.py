@@ -44,7 +44,6 @@ sound_dir = os.path.join(folder_path, "sound")
 
 loadingrun = False
 
-button_click_sound = pygame.mixer.music.load(os.path.join(sound_dir, "ButtonPress.mp3"))
 
 def write(txt, x, y, font="arial", color=BLACK, size=30, aa=True, angle=0):
     temp = pygame.font.SysFont(font, size, True)
@@ -59,7 +58,6 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(win, ac, (x, y, w, h))
         if click[0] == 1 and action is not None:
-            pygame.mixer.music.play()
             if args is not None:
                 action(args)
             else:
@@ -328,7 +326,9 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
 
         if not isopen:
             for b in button_list:
-                if b[0] == cx and b[1] == cy:
+                if b[0] == cx and b[1] == cy and not b[2]:
+                    pygame.mixer.music.load(os.path.join(sound_dir, "ButtonPress.mp3"))
+                    pygame.mixer.music.play()
                     b[2] = True
             count = 0
             for b in button_list:

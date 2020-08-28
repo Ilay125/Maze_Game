@@ -3,6 +3,11 @@ import random
 
 class Generator:
     def __init__(self, rows, cols):
+        '''
+        Initiate the generator.
+        :param rows: int
+        :param cols: int
+        '''
         self.start = (random.randrange(0, cols), random.randrange(0, rows))
         self.Grid = g(rows, cols)
         self.loc = self.start
@@ -14,6 +19,10 @@ class Generator:
         self.last = ()
 
     def random_end_point(self):
+        '''
+        Selects a random end point.
+        :return: (int, int)
+        '''
         borderrows = self.rows // 2
         bordercols = self.cols // 2
 
@@ -29,6 +38,11 @@ class Generator:
         return c_end, r_end
 
     def random_buttons(self, numofbuttons):
+        '''
+        Selects random locations for buttons.
+        :param numofbuttons: int
+        :return: list
+        '''
         listofbuttons = []
         for i in range(numofbuttons):
             c = random.randrange(0, self.cols)
@@ -46,7 +60,10 @@ class Generator:
         return listofbuttons
 
     def deadend(self):
-
+        '''
+        Retrace the steps when hits a dead-end.
+        :return: str
+        '''
         self.impossible.append(self.loc)
 
         backc = self.loc[1] - self.way[-2][1]
@@ -65,6 +82,11 @@ class Generator:
             return "right"
 
     def turn(self, loc):
+        '''
+        Turns to a possible direction.
+        :param loc: (int, int)
+        :return: str
+        '''
         c, r = self.loc
         poss = []
         found = False
@@ -96,6 +118,10 @@ class Generator:
         return random.choice(poss)
 
     def move(self):
+        '''
+        Moves to the chosen direction.
+        :return: None
+        '''
         c, r = self.loc
         cell = self.Grid.grid[c][r]
 

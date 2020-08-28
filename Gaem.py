@@ -7,7 +7,9 @@ from Classes.Console import Console
 from time import time
 from math import ceil
 
+pygame.mixer.pre_init(44100, -16, 2, 2048)
 pygame.init()
+pygame.mixer.init()
 
 WIDTH = 1200
 HEIGHT = 1000
@@ -38,9 +40,11 @@ clock = pygame.time.Clock()
 
 folder_path = os.path.dirname(__file__)
 image_dir = os.path.join(folder_path, "images")
+sound_dir = os.path.join(folder_path, "sound")
 
 loadingrun = False
 
+button_click_sound = pygame.mixer.music.load(os.path.join(sound_dir, "ButtonPress.mp3"))
 
 def write(txt, x, y, font="arial", color=BLACK, size=30, aa=True, angle=0):
     temp = pygame.font.SysFont(font, size, True)
@@ -55,6 +59,7 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(win, ac, (x, y, w, h))
         if click[0] == 1 and action is not None:
+            pygame.mixer.music.play()
             if args is not None:
                 action(args)
             else:

@@ -66,10 +66,13 @@ def button(msg, x, y, w, h, ic, ac, font="arial", fontSize=30, tcolor=BLACK, act
     screen_text = font.render(msg, True, tcolor)
     win.blit(screen_text, (x-screen_text.get_rect().width/2+w/2, y-screen_text.get_rect().height/2+h/2))
 
-def timer(start_time, Time):
-    this_time = int(time()-start_time) if Time == -1 else int(Time-int(time()-start_time))
+
+def timer(start_time, countdown_time):
+    countup_time = int(time()-start_time)
+    countdown_time = int(countdown_time * 60) if countdown_time > -1 else -1
+    this_time = countup_time if countdown_time == -1 else countdown_time-countup_time
     minutes = str(this_time//60) if len(str(this_time//60)) > 1 else f"0{str(this_time//60)}"
-    seconds = str(this_time%60) if len(str(this_time%60)) > 1 else f"0{str(this_time%60)}"
+    seconds = str(this_time % 60) if len(str(this_time % 60)) > 1 else f"0{str(this_time%60)}"
 
     return f"{minutes}:{seconds}"
 
@@ -241,7 +244,7 @@ def finish(timer, mode, level=0, diff=0):
 
         button("YOU FINISHED THE LEVEL!", 0, 0, WIDTH, HEIGHT-200, WHITE, WHITE, tcolor=CYAN, fontSize=100)
         write(f"Time: {timer}", WIDTH // 2 - 200, 450, size=100)
-        if level == 10:
+        if level == 10 or (level == 3 and diff == 0) or (level == 5 and diff == 3) or (level == 7 and diff == 2):
             mode = "custom"
 
         if mode == "custom":
@@ -254,7 +257,7 @@ def finish(timer, mode, level=0, diff=0):
         pygame.display.update()
 
 
-def custom(rows, cols, theme, buttons, mode, timecount=0, lvl=0, diff=0):
+def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
     global loadingrun
     loadingrun = True
     threading.Thread(target=loading_screen).start()
@@ -300,7 +303,7 @@ def custom(rows, cols, theme, buttons, mode, timecount=0, lvl=0, diff=0):
 
         win.fill(WHITE)
         for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
+            if event.type == pygame.KEYDOWN:
                 if (event.key == pygame.K_UP or event.key == pygame.K_w) and grid[cx][cy].up:
                     if cy > 0:
                         cy -= 1
@@ -313,6 +316,7 @@ def custom(rows, cols, theme, buttons, mode, timecount=0, lvl=0, diff=0):
                 if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and grid[cx][cy].right:
                     if cx < rows-1:
                         cx += 1
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -380,6 +384,9 @@ def custom(rows, cols, theme, buttons, mode, timecount=0, lvl=0, diff=0):
         write(f"Cols: {cols}", 1010, 280, color=WHITE if theme == "futuristic" else BLACK)
         write(f"Theme:", 1010, 330, color=WHITE if theme == "futuristic" else BLACK)
         write(f"{theme}", 1010, 360, color=WHITE if theme == "futuristic" else BLACK)
+        write(f"Level: {lvl}" if lvl > 0 else "", 1010, 410, color=WHITE if theme == "futuristic" else BLACK)
+
+        button("Exit", 1025, HEIGHT - 120, 150, 100, DARKRED, RED, action=exit)
 
         pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK,
                            (int(cx*cell_width+cell_width/2), int(cy*cell_height+cell_height/2)), cursor_rad)
@@ -401,10 +408,10 @@ def diff_selector():
 
         button("Select your difficulty:", 0, 0, WIDTH, HEIGHT / 2, WHITE, WHITE, tcolor=CYAN, fontSize=100)
 
-        button("Eww what a BABY", 100, HEIGHT / 2, 450, 150, DARKGREEN, GREEN, fontSize=50, action=game, args=(0, 1))
-        button("Ehh.. average", WIDTH - 550, HEIGHT / 2, 450, 150, DARKCYAN, CYAN, fontSize=50, action=game, args=(3, 1))
-        button("MY PP", 100, HEIGHT / 2 + 200, 450, 150, DARKORANGE, ORANGE, fontSize=50, action=game, args=(2, 1))
-        button("EPIK GAMER", WIDTH - 550, HEIGHT / 2 + 200, 450, 150, DARKRED, RED, fontSize=50, action=game, args=(1, 1))
+        button("Eww what a BABY", 100, HEIGHT / 2 + 100, 450, 150, DARKGREEN, GREEN, fontSize=50, action=game, args=(0, 1))
+        button("Ehh.. average", WIDTH - 550, HEIGHT / 2 + 100, 450, 150, DARKCYAN, CYAN, fontSize=50, action=game, args=(3, 1))
+        button("MY PP", 100, HEIGHT / 2 + 300, 450, 150, DARKORANGE, ORANGE, fontSize=50, action=game, args=(2, 1))
+        button("EPIK GAMER", WIDTH - 550, HEIGHT / 2 + 300, 450, 150, DARKRED, RED, fontSize=50, action=game, args=(1, 1))
 
         clock.tick(30)
         pygame.display.update()

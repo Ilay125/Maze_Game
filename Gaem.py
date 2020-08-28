@@ -313,13 +313,13 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
                     if cy > 0:
                         cy -= 1
                 if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and grid[cx][cy].down:
-                    if cy < cols-1:
+                    if cy < rows-1:
                         cy += 1
                 if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and grid[cx][cy].left:
                     if cx > 0:
                         cx -= 1
                 if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and grid[cx][cy].right:
-                    if cx < rows-1:
+                    if cx < cols-1:
                         cx += 1
 
             if event.type == pygame.QUIT:

@@ -120,9 +120,9 @@ def loading_screen():
 
 
 def verify_custom_form(args):
-    rows, cols, buttons, theme = args
+    rows, cols, buttons, theme, state = args
     if (rows == "" or rows == "_") and (cols == "" or cols == "_") and (buttons == "" or buttons == "_") and (theme == "" or theme == "_"):
-        custom_form()
+        custom_form(state)
     if rows.isnumeric():
         rows = int(rows)
     else:
@@ -223,7 +223,7 @@ def custom_form(error=False):
         write("*The input is invalid." if error else "", 150, 600, color=RED)
 
         button("Submit", WIDTH/2 - 225, HEIGHT - 300, 450, 150, DARKRED, RED, fontSize=50, action=verify_custom_form,
-               args=(rows_console.txt, cols_console.txt, buttons_console.txt, theme_console.txt))
+               args=(rows_console.txt, cols_console.txt, buttons_console.txt, theme_console.txt, error))
         pygame.display.update()
 
 
@@ -233,7 +233,7 @@ def generation(rows, cols, buttons):
     while not gen.done:
         gen.move()
 
-    return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons)
+    return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons, gen.start, gen.last)
 
 def timesup():
     sentences = ("Awww.. what a cute baby", "HAHA WHAT A LOSER", "DING DING DING", "He noob", "OOF")

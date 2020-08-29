@@ -37,7 +37,7 @@ class Generator:
 
         return c_end, r_end
 
-    def random_buttons(self, numofbuttons):
+    def random_buttons(self, numofbuttons, startpoint, endpoint):
         '''
         Selects random locations for buttons.
         :param numofbuttons: int
@@ -46,12 +46,8 @@ class Generator:
         listofbuttons = []
         for i in range(numofbuttons):
             c = random.randrange(0, self.cols)
-            while c == self.start[0] or c == self.last[0]:
-                c = random.randrange(0, self.cols)
             r = random.randrange(0, self.rows)
-            while r == self.start[1] or r == self.last[1]:
-                r = random.randrange(0, self.rows)
-            while [c, r, False] in listofbuttons:
+            while [c, r, False] in listofbuttons or (c, r) == startpoint or (c, r) == endpoint:
                 c = random.randrange(0, self.cols)
                 r = random.randrange(0, self.rows)
 

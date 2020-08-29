@@ -235,6 +235,23 @@ def generation(rows, cols, buttons):
 
     return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons)
 
+def timesup():
+    sentences = ("Awww.. what a cute baby", "HAHA WHAT A LOSER", "DING DING DING", "He noob", "OOF")
+    word = choice(sentences)
+    while True:
+        win.fill(WHITE)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        button(word, 0, 0, WIDTH, HEIGHT / 2, WHITE, WHITE, tcolor=CYAN, fontSize=100)
+        button("TIME'S UP!", 0, HEIGHT / 2 - 200, WIDTH, HEIGHT / 2 - 200, WHITE, WHITE, tcolor=BLACK, fontSize=100)
+        button("Main Menu", WIDTH // 2 - 200, HEIGHT - 200, 450, 150, DARKRED, RED, fontSize=50, action=menu)
+
+
+        clock.tick(30)
+        pygame.display.update()
 
 def finish(timer, mode, level=0, diff=0):
     global loadingrun
@@ -335,10 +352,15 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
                 if b[2]:
                     count += 1
             if count == len(button_list):
+                pygame.mixer.music.load(os.path.join(sound_dir, "Ding.mp3"))
+                pygame.mixer.music.play()
                 isopen = True
         else:
             if cx == endpoint[0] and cy == endpoint[1]:
                 finish(timer(start_time, -1), mode, lvl, diff)
+
+        if timer(start_time, timecount) == "00:00" and timecount > 0:
+            timesup()
 
         for r in range(rows//5+1):
             for c in range(cols//5+1):

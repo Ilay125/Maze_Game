@@ -236,6 +236,8 @@ def generation(rows, cols, buttons):
     return gen.Grid.grid, gen.start, gen.last, gen.random_buttons(buttons, gen.start, gen.last)
 
 def timesup():
+    pygame.mixer.music.pause()
+
     sentences = ("Awww.. what a cute baby", "HAHA WHAT A LOSER", "DING DING DING", "He noob", "OOF")
     word = choice(sentences)
     while True:
@@ -255,6 +257,8 @@ def timesup():
 
 def finish(timer, mode, level=0, diff=0):
     global loadingrun
+
+    pygame.mixer.music.pause()
     while True:
         win.fill(WHITE)
         for event in pygame.event.get():
@@ -404,7 +408,14 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
         if mode == "custom" or diff == 0:
             write(f"Time: {timer(start_time, -1)}", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
         else:
-            write(f"Time: {timer(start_time, timecount)} left", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
+            if timer(start_time, timecount)[:2] == "00" and int(timer(start_time, timecount)[3:]) <= 20:
+                if int(timer(start_time, timecount)[3:]) % 2 == 0:
+                    pygame.mixer.music.load(os.path.join(sound_dir, "ClockTicking.mp3"))
+                    pygame.mixer.music.play()
+                write(f"Time: {timer(start_time, timecount)} left", 1010, 100,
+                      color=RED)
+            else:
+                write(f"Time: {timer(start_time, timecount)} left", 1010, 100, color=WHITE if theme == "futuristic" else BLACK)
         write(f"{buttons-count} {'buttons' if buttons-count != 1 else 'button'} left", 1010, 150, color=WHITE if theme == "futuristic" else BLACK)
         write(f"out of {buttons} {'buttons' if buttons != 1 else 'button'}", 1010, 180, color=WHITE if theme == "futuristic" else BLACK)
         write(f"Rows: {rows}", 1010, 230, color=WHITE if theme == "futuristic" else BLACK)

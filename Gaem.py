@@ -482,6 +482,7 @@ def game(args):
 
 
 def menu():
+    ClockTickingChannel.pause()
     menu_dir = os.path.join(image_dir, "menu")
     title_img = pygame.image.load(os.path.join(menu_dir, "title.png"))
 

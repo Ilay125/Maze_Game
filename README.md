@@ -8,6 +8,8 @@ by iLay#1272 && I live on saturn#6795
 
 The game file is called: "Gaem.py"
 
+You need to have python 3 and pygame (the code is written in python 3.7).
+
 However, if you wish to see how the algorithm
 works, you should check out the file "Test.py" in the
 Tests folder.

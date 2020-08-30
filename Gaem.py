@@ -25,6 +25,9 @@ DARKGREEN = (0, 180, 0)
 CYAN = (0, 255, 255)
 DARKCYAN = (0, 180, 180)
 
+BLUE = (0, 0, 255)
+DARKBLUE = (0, 0, 180)
+
 ORANGE = (255, 140, 0)
 DARKORANGE = (180, 65, 0)
 
@@ -434,9 +437,31 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
         write(f"Cols: {cols}", 1010, 280, color=WHITE if theme == "futuristic" else BLACK)
         write(f"Theme:", 1010, 330, color=WHITE if theme == "futuristic" else BLACK)
         write(f"{theme}", 1010, 360, color=WHITE if theme == "futuristic" else BLACK)
-        write(f"Level: {lvl}" if lvl > 0 else "", 1010, 410, color=WHITE if theme == "futuristic" else BLACK)
+        if lvl > 0:
+            diff_name = ""
+            sum_lvls = ""
 
-        button("Menu", 1025, HEIGHT - 240, 150, 100, DARKCYAN, CYAN, action=menu)
+            if diff == 0:
+                diff_name = "Easy"
+                sum_lvls = "3"
+            elif diff == 3:
+                diff_name = "Medium"
+                sum_lvls = "5"
+            elif diff == 2:
+                diff_name = "Hard"
+                sum_lvls = "7"
+            elif diff == 1:
+                diff_name = "Ultimate"
+                sum_lvls = "10"
+
+            write("Difficulty:", 1010, 410, color=WHITE if theme == "futuristic" else BLACK)
+            write(diff_name, 1010, 440, color=WHITE if theme == "futuristic" else BLACK)
+            write(f"Level {lvl} out", 1010, 490, color=WHITE if theme == "futuristic" else BLACK)
+            write(f"of {sum_lvls}", 1010, 520, color=WHITE if theme == "futuristic" else BLACK)
+
+
+
+        button("Menu", 1025, HEIGHT - 240, 150, 100, DARKBLUE, BLUE, action=menu)
         button("Exit", 1025, HEIGHT - 120, 150, 100, DARKRED, RED, action=exit)
 
         pygame.draw.circle(win, BLACK if theme == "futuristic" else WHITE,

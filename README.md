@@ -18,6 +18,9 @@ Start - will start the main game.
 
 Custom - will let you create your own maze.
 
+Above 150x150 starts to be really heavy on the pc -
+the game might crash.
+
 The goal of the main game is to press all of the buttons
 and go to the trapdoor under the time limit.
 

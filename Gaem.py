@@ -324,7 +324,7 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
             if randint(1, 10) == 10:
                 specialblocklist.append([c, r])
 
-    cursor_rad = 8
+    cursor_rad = int((cell_width + cell_height) // 6)
     cx = startpoint[0]
     cy = startpoint[1]
 
@@ -374,8 +374,8 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
         if timer(start_time, timecount) == "00:00" and timecount > 0:
             timesup()
 
-        for r in range(rows // 5 + 1):
-            for c in range(cols // 5 + 1):
+        for r in range(int(rows/2.5)):
+            for c in range(int(cols/2.5)):
 
                 for s in specialblocklist:
                     if s[0] == c and s[1] == r:
@@ -436,9 +436,10 @@ def custom(rows, cols, theme, buttons, mode, timecount=-1, lvl=0, diff=0):
         write(f"{theme}", 1010, 360, color=WHITE if theme == "futuristic" else BLACK)
         write(f"Level: {lvl}" if lvl > 0 else "", 1010, 410, color=WHITE if theme == "futuristic" else BLACK)
 
+        button("Menu", 1025, HEIGHT - 240, 150, 100, DARKCYAN, CYAN, action=menu)
         button("Exit", 1025, HEIGHT - 120, 150, 100, DARKRED, RED, action=exit)
 
-        pygame.draw.circle(win, WHITE if theme == "mordor" else BLACK,
+        pygame.draw.circle(win, BLACK if theme == "futuristic" else WHITE,
                            (int(cx * cell_width + cell_width / 2), int(cy * cell_height + cell_height / 2)), cursor_rad)
 
         clock.tick(255)

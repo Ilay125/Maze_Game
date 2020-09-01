@@ -5,7 +5,7 @@ uses the recursive backtracking algorithm.**<br>Made for the Timathon - Code Jam
 by @iLay#1272 && @I live on saturn#6795.
 
 
-##Requirements
+## Requirements
 **You need to have python 3.7+ and pygame** to be able to run the game.
 
 To download python 3.7: https://www.python.org/downloads/release/python-379/
@@ -16,7 +16,7 @@ To download pygame in windows 10:
 * Go to Scripts folder.
 * Type: `pip install pygame`
 
-##The Game
+## The Game
 The game is called: **"Gaem.py"**
 
 To move, use the WASD keys of the arrow keys.
@@ -39,13 +39,13 @@ and go to the trapdoor under the time limit.
 * _Hard_ - MY PP
 * _Ultimate_ - EPIK GAMER
 
-##Test files
+## Test files
 If you wish to see the way that the algorithm works, you
 should check out the files in the test folder.
 
 **However,** you need to extract the files from the folder to the main folder (Where the game file is).
 
-##Test.py
+## Test.py
 The main test file is called: `Test.py` in the Tests folder.<br>
 The test file shows how the algorithm works and that's how we tested it.<br>
 
